@@ -29,74 +29,105 @@
     <div class="container">
       <section id="main_content">
         <h2>
-<a id="香草vanilla" class="anchor" href="#%E9%A6%99%E8%8D%89vanilla" aria-hidden="true"><span class="octicon octicon-link"></span></a>香草/Vanilla</h2>
+<a id="vanilla--香草中文文档" class="anchor" href="#vanilla--%E9%A6%99%E8%8D%89%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vanilla / (香草<a href="README-zh.md">中文文档</a>)</h2>
 
-<p><em>香草/Vanilla是一个基于Openresty实现的高性能Web应用开发框架.</em></p>
+<p><em>Vanilla is An OpenResty Lua MVC Web Framework.</em></p>
 
-<p><img src="http://m1.sinaimg.cn/maxwidth.300/m1.sinaimg.cn/120d7329960e19cf073f264751e8d959_2043_2241.png" alt="Vanilla"></p>
+<p><img src="vanilla-en.png" alt="Vanilla"></p>
 
 <h3>
-<a id="安装说明" class="anchor" href="#%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E" aria-hidden="true"><span class="octicon octicon-link"></span></a>安装说明</h3>
+<a id="maillist" class="anchor" href="#maillist" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>MailList</em>
+</h3>
 
-<ol>
-<li>Vanilla使用Luarocks管理包依赖</li>
-<li>安装Luarocks（with lua5.1）</li>
-<li>使用Openresty最新稳定版</li>
-</ol>
+<p>vanilla-en <a href="mailto:vanilla-en@googlegroups.com">vanilla-en@googlegroups.com</a></p>
 
-<h5>
-<a id="安装示例--linux平台" class="anchor" href="#%E5%AE%89%E8%A3%85%E7%A4%BA%E4%BE%8B--linux%E5%B9%B3%E5%8F%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>安装示例 / Linux平台</em>
-</h5>
+<p>vanilla-devel <a href="mailto:vanilla-devel@googlegroups.com">vanilla-devel@googlegroups.com</a></p>
 
-<pre><code>yum install lua-devel luarocks  -- 需要安装Lua开发版
-luarocks install vanilla
+<p>vanilla中文邮件列表 <a href="mailto:vanilla@googlegroups.com">vanilla@googlegroups.com</a></p>
+
+<h3>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>Install</em>
+</h3>
+
+<pre><code>./configure --prefix=/usr/local/vanilla --openresty-path=/usr/local/openresty
+
+make install
 </code></pre>
 
 <h5>
-<a id="安装示例--macosx平台" class="anchor" href="#%E5%AE%89%E8%A3%85%E7%A4%BA%E4%BE%8B--macosx%E5%B9%B3%E5%8F%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>安装示例 / MacOSX平台</em>
+<a id="configure" class="anchor" href="#configure" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>configure</em>
 </h5>
 
-<pre><code>wget lua5.1(lua5.1 源码地址)
-源码安装lua5.1
-wget luarocks（luarocks源码地址）
-源码安装luarocks
-luarocks install vanilla
+<p>Vanilla have default value for the options, but if your environment is different from the default value, please change it with yours.</p>
+
+<p>And you can run <code>make install</code> after your configuration to install vanill.</p>
+
+<pre><code>./configure --help
+  --help                                this message
+
+  --prefix=PATH                         set the installation prefix (default to /usr/local/vanilla)
+  --vanilla-bin-path=PATH               set vanilla bin path (default to /usr/local/bin)
+  --platform=                           set platform(darwin, linux...)
+
+  --openresty-path=PATH                 set openresty install path (default to /usr/local/openresty)
+  --with-openresty-luajit-include-path=PATH
+                                        set openresty luajit include path for install C moudle
+                                        (like: /usr/local/openresty/luajit/include/luajit-2.1)
+  --with-luajit-or-lua-bin=BIN          set openresty luajit or standard lua bin for run vanilla vanilla-console
+                                        (default to $openresty_path/luajit/bin/luajit*)
+
+  --without-lua-resty-cookie            disable the lua-resty-cookie library
+  --without-lua-resty-template          disable the lua-resty-template library
+  --without-lua-resty-http              disable the lua-resty-http library
+  --without-lua-resty-logger-socket     disable the lua-resty-logger-socket library
+  --without-lua-resty-session           disable the lua-resty-session library
+  --without-lua-resty-shcache           disable the lua-resty-shcache library
+
+  --with-lua-filesystem                 enable and build lua-filesystem
+                                        (must need option --with-openresty-luajit-include-path)
 </code></pre>
 
 <h5>
-<a id="为何建议lua51版本" class="anchor" href="#%E4%B8%BA%E4%BD%95%E5%BB%BA%E8%AE%AElua51%E7%89%88%E6%9C%AC" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>为何建议Lua5.1版本</em>
+<a id="cmds" class="anchor" href="#cmds" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>CMDS</em>
 </h5>
 
-<ol>
-<li><em>Openresty执行Lua需要基于Luajit加速，Luajit使用Lua5.1的ABI</em></li>
-<li><em>Luarocks会根据Lua版本识别相应的包</em></li>
-<li><em>Vanilla运行Openresty前需要基于Lua5.1做服务相关自动化配置</em></li>
-</ol>
+<p>Vanilla provide two commands like <code>vanilla</code>, and <code>vanilla-console</code>, <code>vanilla</code> is for application building, service start, stop and so on, <code>vanilla-console</code> is an interactive command line， you can use it for debugging.</p>
 
 <h5>
-<a id="为何建议源码安装" class="anchor" href="#%E4%B8%BA%E4%BD%95%E5%BB%BA%E8%AE%AE%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>为何建议源码安装</em>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>How to use</em>
 </h5>
 
-<ol>
-<li><em>源码安装更方便版本控制</em></li>
-<li><em>尤其MacOSX10.9后brew默认安装的Lua是5.2版本，而Openresty必须源码安装5.1</em></li>
-</ol>
+<p>Run <code>vanilla</code> in command line, you can find command <code>vanilla</code> provide three options.</p>
+
+<pre><code>vanilla
+Vanilla v0.1.0-rc3, A MVC web framework for Lua powered by OpenResty.
+
+Usage: vanilla COMMAND [ARGS] [OPTIONS]
+
+The available vanilla commands are:
+ new [name]             Create a new Vanilla application
+ start                  Starts the Vanilla server
+ stop                   Stops the Vanilla server
+
+Options:
+ --trace                Shows additional logs
+</code></pre>
 
 <h2>
-<a id="使用" class="anchor" href="#%E4%BD%BF%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用</h2>
+<a id="vanilla-usage" class="anchor" href="#vanilla-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vanilla usage</h2>
 
 <h5>
-<a id="应用代码骨架生成及服务启动" class="anchor" href="#%E5%BA%94%E7%94%A8%E4%BB%A3%E7%A0%81%E9%AA%A8%E6%9E%B6%E7%94%9F%E6%88%90%E5%8F%8A%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>应用代码骨架生成及服务启动</em>
+<a id="building-up-an-application-skeleton" class="anchor" href="#building-up-an-application-skeleton" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>Building up an application skeleton</em>
 </h5>
 
 <pre><code>vanilla new app_name
 cd app_name
-vanilla start [--trace]     -- 默认运行在development环境
-VA_ENV=production vanilla start [--trace]  -- 运行在生产环境
+vanilla start [--trace]     -- default running in development environment.
+VA_ENV=production vanilla start [--trace]  -- add VA_ENV to set the running environment.
 </code></pre>
 
 <h5>
-<a id="代码目录结构说明" class="anchor" href="#%E4%BB%A3%E7%A0%81%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>代码目录结构说明</em>
+<a id="the-code-directory-structure" class="anchor" href="#the-code-directory-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>The code directory structure</em>
 </h5>
 
 <pre><code> /Users/zj-git/app_name/ tree ./
@@ -145,7 +176,7 @@ VA_ENV=production vanilla start [--trace]  -- 运行在生产环境
 </code></pre>
 
 <h5>
-<a id="业务代码示例-indexcontroller" class="anchor" href="#%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-indexcontroller" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>业务代码示例 IndexController</em>
+<a id="demo-indexcontroller" class="anchor" href="#demo-indexcontroller" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>demo IndexController</em>
 </h5>
 
 <pre><code>local IndexController = {}
@@ -163,7 +194,7 @@ return IndexController
 </code></pre>
 
 <h5>
-<a id="模板示例-viewsindexindexhtml" class="anchor" href="#%E6%A8%A1%E6%9D%BF%E7%A4%BA%E4%BE%8B-viewsindexindexhtml" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>模板示例 views/index/index.html</em>
+<a id="template-demo-viewsindexindexhtml" class="anchor" href="#template-demo-viewsindexindexhtml" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>Template demo views/index/index.html</em>
 </h5>
 
 <pre><code>&lt;!DOCTYPE html&gt;
@@ -176,7 +207,7 @@ return IndexController
 </code></pre>
 
 <h2>
-<a id="为什么需要vanilla" class="anchor" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81vanilla" aria-hidden="true"><span class="octicon octicon-link"></span></a>为什么需要Vanilla</h2>
+<a id="why-you-need-vanilla" class="anchor" href="#why-you-need-vanilla" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why You need Vanilla</h2>
 
 <p>回答这个问题，我们只需要看清楚Openresty和Vanilla各自做了什么即可。</p>
 
@@ -214,8 +245,9 @@ return IndexController
 <a id="qq群微信公众号" class="anchor" href="#qq%E7%BE%A4%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>QQ群&amp;&amp;微信公众号</em>
 </h5>
 
-<p><img src="vanilla_QQ.png" alt="Vanilla-OpenResty开发QQ群">
-<img src="vanilla_openresty.png" alt="Vanilla-OpenResty开发公众号"></p>
+<p><em>Openresty/Vanilla开发QQ群：205773855（专题讨论Vanilla相关话题）</em><br>
+<em>Openresty 技术交流QQ群：34782325（讨论OpenResty和各种高级技术）</em><br>
+<em>Vanilla开发微信公众号:Vanilla-OpenResty(Vanilla相关资讯、文档推送)</em></p>
 
 <p><a href="http://shang.qq.com/wpa/qunwpa?idkey=673157ee0f0207ce2fb305d15999225c5aa967e88913dfd651a8cf59e18fd459"><img src="http://pub.idqqimg.com/wpa/images/group.png" alt="QQ"></a></p>
       </section>
