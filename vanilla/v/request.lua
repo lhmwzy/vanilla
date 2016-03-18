@@ -2,46 +2,37 @@
 local error = error
 local pairs = pairs
 local setmetatable = setmetatable
-local sfind = string.find
+local ngx_re_find = ngx.re.find
+local ngx_req_read_body = ngx.req.read_body
+
 local Request = {}
 
 function Request:new()
-    local params = {} -- body params
+    local is_upload = false
     local headers = ngx.req.get_headers()
+    local upload_head = headers['Content-Type']
+    if upload_head then
+        local is_multipart_head = ngx_re_find(upload_head, [[multipart]], "o")
+        if is_multipart_head and is_multipart_head > 0 then is_upload = true end
+    end
 
-    local header = headers['Content-Type']
-    if header then
-        local is_multipart = sfind(header, "multipart")
-        if is_multipart and is_multipart>0 then
-            -- upload request, should not invoke ngx.req.read_body()
-        else
-            ngx.req.read_body()
-	    params = ngx.req.get_uri_args()
-            local post_args = ngx.req.get_post_args()
-            if post_args and type(post_args) == "table" then
-                for k,v in pairs(post_args) do
-                    params[k] = v
-                end
-            end
-        end
-    else
-        ngx.req.read_body()
-	params = ngx.req.get_uri_args()
-        local post_args = ngx.req.get_post_args()
-        if post_args and type(post_args) == "table" then
-            for k,v in pairs(post_args) do
-                params[k] = v
-            end
+    local params = ngx.req.get_uri_args()
+    if not is_upload then
+        ngx_req_read_body()
+        for k,v in pairs(ngx.req.get_post_args()) do
+            params[k] = v
         end
     end
+
+    -- url:http://zj.com:9210/di0000/111?aa=xx
     local instance = {
-        uri = ngx.var.uri,
-        req_uri = ngx.var.request_uri,
-        req_args = ngx.var.args,
+        uri = ngx.var.uri,                  -- /di0000/111
+        req_uri = ngx.var.request_uri,      -- /di0000/111?aa=xx
+        req_args = ngx.var.args,            -- aa=xx
         params = params,
-        uri_args = ngx.req.get_uri_args(),
-        method = ngx.req.get_method(), 
-        headers = headers, 
+        uri_args = ngx.req.get_uri_args(),  -- { aa = "xx" }
+        method = ngx.req.get_method(),
+        headers = headers,
         body_raw = ngx.req.get_body_data()
     }
     setmetatable(instance, {__index = self})
@@ -89,4 +80,3 @@ function Request:isGet()
 end
 
 return Request
-
